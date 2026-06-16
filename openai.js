@@ -103,13 +103,23 @@ async function analyzeAndGetRecipes(file, styleKey = 'fast') {
     ]
   }
 
-  const response = await fetch('https://blue-limit-95b7.casido03.workers.dev', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  })
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 60000)
+
+  let response
+  try {
+    response = await fetch('https://blue-limit-95b7.casido03.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody),
+      signal: controller.signal
+    })
+  } catch (e) {
+    clearTimeout(timeout)
+    if (e.name === 'AbortError') throw new Error('Превышено время ожидания. Попробуйте ещё раз.')
+    throw new Error('Нет соединения с сервером. Проверьте интернет.')
+  }
+  clearTimeout(timeout)
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}))

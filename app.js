@@ -437,14 +437,15 @@ async function handleSubscribe() {
 
   try {
     if (bridge && groupId > 0) {
-      // Используем VK Bridge для нативного диалога подписки
       await bridge.send('VKWebAppJoinGroup', { group_id: groupId })
+    } else if (bridge && publicUrl) {
+      // Открываем ссылку через VK Bridge (работает внутри VK WebView)
+      await bridge.send('VKWebAppOpenLink', { link: publicUrl })
     } else if (publicUrl) {
-      // Запасной вариант: открыть ссылку в новой вкладке
       window.open(publicUrl, '_blank', 'noopener,noreferrer')
     }
   } catch (e) {
-    // Пользователь отказался или ошибка — просто закрываем
+    // Пользователь закрыл или ошибка — продолжаем
   }
 
   btn.classList.remove('loading')
