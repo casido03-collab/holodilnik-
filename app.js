@@ -151,12 +151,6 @@ async function handleSubmit() {
     return
   }
 
-  // Проверка API ключа
-  if (!CONFIG.OPENAI_API_KEY || CONFIG.OPENAI_API_KEY.includes('ВСТАВЬТЕ')) {
-    showUploadError('API ключ не настроен. Откройте config.js и вставьте ваш ключ OpenAI.')
-    return
-  }
-
   hideUploadError()
 
   // Показываем окно подписки ПЕРЕД каждым запросом
