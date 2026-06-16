@@ -124,14 +124,22 @@ async function analyzeAndGetRecipes(file, styleKey = 'fast') {
     ]
   }
 
+  const apiKey = CONFIG && CONFIG.OPENAI_API_KEY
+  if (!apiKey || apiKey === 'ВСТАВЬТЕ_КЛЮЧ_ЗДЕСЬ') {
+    throw new Error('API ключ не настроен. Обратитесь к разработчику.')
+  }
+
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 60000)
+  const timeout = setTimeout(() => controller.abort(), 90000)
 
   let response
   try {
-    response = await fetch('https://blue-limit-95b7.casido03.workers.dev', {
+    response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
       body: JSON.stringify(requestBody),
       signal: controller.signal
     })
