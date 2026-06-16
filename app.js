@@ -228,21 +228,19 @@ async function handleSubmit() {
 
   hideUploadError()
 
-  // Показываем окно подписки ПЕРЕД каждым запросом
+  // Показываем окно подписки только если ещё не подписан
+  const alreadySubscribed = localStorage.getItem('holodilnik_subscribed') === '1'
   const publics = CONFIG.VK_PUBLICS
-  if (publics && publics.length > 0) {
-    const idx = state.generationCount % publics.length
-    const vkPublic = publics[idx]
 
+  if (!alreadySubscribed && publics && publics.length > 0) {
+    const vkPublic = publics[0]
     if (vkPublic && (vkPublic.id > 0 || vkPublic.url)) {
-      // Сохраняем что делать после закрытия модалки
       state.afterModalAction = doSubmit
       showSubscribeModal(vkPublic)
       return
     }
   }
 
-  // Если пабликов нет — сразу отправляем
   doSubmit()
 }
 
@@ -481,7 +479,6 @@ async function handleSubscribe() {
   btn.classList.remove('loading')
 
   if (!subscribed) {
-    // Показываем подсказку что нужно подписаться
     const body = document.getElementById('modal-body')
     if (body) {
       body.textContent = 'Нужно подписаться, чтобы получить рецепты. Нажмите кнопку ещё раз.'
@@ -494,6 +491,7 @@ async function handleSubscribe() {
     return
   }
 
+  localStorage.setItem('holodilnik_subscribed', '1')
   hideSubscribeModal()
 }
 
