@@ -4,26 +4,25 @@
 
 const CONFIG = {
 
-  // URL прокси на Vercel — заполните после деплоя на vercel.com
-  // Пример: 'https://holodilnik-.vercel.app/api/proxy'
+  // URL прокси на Google Cloud Functions
   PROXY_URL: 'https://europe-west1-project-621db92b-aeea-43fb-829.cloudfunctions.net/proxy',
 
-  // Паблики VK для предложения подписки (ротация)
-  // Предложение показывается после каждых 2 генераций
-  // Чередуется по очереди: паблик 1 → паблик 2 → паблик 1 → ...
+  // РЕЖИМ МОДЕРАЦИИ: false = подписки не требуются (для прохождения проверки VK)
+  // После получения одобрения VK установите true, чтобы включить проверку подписок
+  SUBSCRIPTION_ACTIVE: false,
+
+  // Паблики VK — пользователь должен быть подписан на все для доступа к приложению.
+  // Проверяются по порядку: первый незаподписанный показывается пользователю.
   VK_PUBLICS: [
-    {
-      id: 200007091,
-      name: 'Наше сообщество',
-      url: 'https://vk.com/club200007091',
-      description: 'Подпишитесь, чтобы получать рецепты бесплатно'
-    },
+    { id: 84301687,  name: 'Идеи для дачи',   url: 'https://vk.com/ideadacha' },
+    { id: 189041751, name: 'Малая дача',       url: 'https://vk.com/mal_dachi' },
+    { id: 154419301, name: 'Простой повар',    url: 'https://vk.com/prostpovar' },
+    { id: 49119600,  name: '30 минут',         url: 'https://vk.com/30min_meals' },
+    { id: 164511121, name: 'Ресничкионлайн',   url: 'https://vk.com/resnichkionline' },
+    { id: 175656793, name: 'Сливки юмора',     url: 'https://vk.com/slivkihumora' },
+    { id: 166652899, name: 'Фит в тарелке',    url: 'https://vk.com/fitvtarelke' },
+    { id: 176975271, name: 'Идеи дома',        url: 'https://vk.com/ideidoma91' },
+    { id: 109687628, name: 'Дача секрет',      url: 'https://vk.com/dacha_sekret' },
+    { id: 167046442, name: 'Пикник',           url: 'https://vk.com/piknvst' },
   ]
-  // Как найти числовой ID паблика:
-  // 1. Откройте паблик в браузере
-  // 2. Нажмите Ctrl+U (просмотр кода страницы)
-  // 3. Найдите (Ctrl+F): "group_id" или "page_id"
-  //    Пример: "group_id":12345678 — вставьте 12345678 в поле id выше
-  // Числовой ID нужен только для нативного VK-диалога подписки.
-  // Без него приложение просто откроет страницу паблика в новой вкладке.
 }

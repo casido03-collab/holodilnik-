@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#EA580C">
   <title>Что приготовить?</title>
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=23">
   <!-- VK Bridge SDK — нужен для работы внутри VK Mini Apps -->
   <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 </head>
@@ -19,25 +19,17 @@
   <section id="screen-welcome" class="screen" role="main" aria-label="Добро пожаловать">
 
     <div class="welcome-logo" role="img" aria-label="Холодильник с едой">
-      <!-- SVG: кастомный логотип — кастрюля/холодильник -->
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Холодильник корпус -->
         <rect x="10" y="6" width="36" height="44" rx="6" fill="rgba(255,255,255,0.25)" stroke="white" stroke-width="2"/>
-        <!-- Разделитель морозилки -->
         <line x1="10" y1="24" x2="46" y2="24" stroke="white" stroke-width="2"/>
-        <!-- Ручка верх -->
         <rect x="25" y="12" width="3" height="8" rx="1.5" fill="white"/>
-        <!-- Ручка низ -->
         <rect x="25" y="30" width="3" height="10" rx="1.5" fill="white"/>
-        <!-- Декор: листик -->
         <path d="M31 36 C34 34, 37 36, 37 39 C37 42, 34 43, 31 41 C31 41, 31 38, 34 37" fill="rgba(255,255,255,0.6)"/>
-        <!-- Точка статуса -->
         <circle cx="38" cy="15" r="3" fill="rgba(255,255,255,0.9)"/>
       </svg>
     </div>
 
     <div class="welcome-badge" aria-label="Работает на ИИ">
-      <!-- SVG: звезда ИИ -->
       <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M7 1L8.5 5.5H13L9.5 8.5L11 13L7 10L3 13L4.5 8.5L1 5.5H5.5L7 1Z"
               fill="#10B981" stroke="#059669" stroke-width="0.5"/>
@@ -93,11 +85,8 @@
       <p class="screen-subtitle">Откройте дверцу и сфотографируйте содержимое — чем виднее продукты, тем лучше</p>
     </div>
 
-    <!-- Область загрузки / превью фото -->
     <div class="upload-zone glass-card" id="upload-zone" role="button" tabindex="0"
          aria-label="Область для загрузки фотографии" onclick="handleUploadZoneClick(event)">
-
-      <!-- Состояние: нет фото -->
       <div id="upload-empty-state">
         <div class="upload-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -109,13 +98,9 @@
         <p class="upload-hint">Нажмите, чтобы добавить фото</p>
         <p class="upload-subhint">JPG, PNG до 20 МБ</p>
       </div>
-
-      <!-- Состояние: фото выбрано -->
       <img id="photo-preview" alt="Предварительный просмотр загруженного фото" aria-live="polite">
-
     </div>
 
-    <!-- Кнопка "Изменить фото" (появляется после выбора) -->
     <div class="photo-actions" id="photo-actions">
       <button class="btn-change-photo" onclick="triggerInput('gallery')" aria-label="Выбрать другое фото из галереи">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -126,7 +111,6 @@
       </button>
     </div>
 
-    <!-- Кнопки выбора источника -->
     <div class="source-btns">
       <button class="btn-source" onclick="triggerInput('camera')" aria-label="Сделать фото камерой">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -145,26 +129,20 @@
       </button>
     </div>
 
-    <!-- Выбор стиля рецептов -->
     <div>
       <p class="style-label">Тип рецептов:</p>
       <div class="style-pills" role="radiogroup" aria-label="Выберите тип рецептов">
         <button class="style-pill active" id="pill-fast"
-                onclick="selectStyle('fast')" role="radio" aria-checked="true">
-          Быстрые
-        </button>
+                onclick="selectStyle('fast')" role="radio" aria-checked="true">⚡ Быстрые</button>
         <button class="style-pill" id="pill-detailed"
-                onclick="selectStyle('detailed')" role="radio" aria-checked="false">
-          Подробные
-        </button>
+                onclick="selectStyle('detailed')" role="radio" aria-checked="false">📖 Подробные</button>
         <button class="style-pill" id="pill-diet"
-                onclick="selectStyle('diet')" role="radio" aria-checked="false">
-          Диетические
-        </button>
+                onclick="selectStyle('diet')" role="radio" aria-checked="false">🥗 Диета</button>
+        <button class="style-pill" id="pill-kids"
+                onclick="selectStyle('kids')" role="radio" aria-checked="false">👶 Детские</button>
       </div>
     </div>
 
-    <!-- Блок ошибки -->
     <div class="error-block" id="upload-error" role="alert" aria-live="polite">
       <div class="error-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -178,11 +156,9 @@
 
     <div class="spacer"></div>
 
-    <!-- Скрытые file input'ы -->
     <input type="file" id="input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleFileInput(this)">
     <input type="file" id="input-gallery" accept="image/*" style="display:none" onchange="handleFileInput(this)">
 
-    <!-- Кнопка отправки -->
     <button class="btn-primary" id="btn-submit" onclick="handleSubmit()" aria-label="Отправить фото и получить рецепты">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <line x1="22" y1="2" x2="11" y2="13"/>
@@ -204,15 +180,10 @@
       <div class="loading-glow" aria-hidden="true"></div>
       <div class="loading-fridge-icon" aria-hidden="true">
         <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Холодильник корпус -->
           <rect x="8" y="4" width="48" height="72" rx="8" fill="rgba(234,88,12,0.12)" stroke="#EA580C" stroke-width="2.5"/>
-          <!-- Разделитель -->
           <line x1="8" y1="30" x2="56" y2="30" stroke="#EA580C" stroke-width="2"/>
-          <!-- Ручка верх -->
           <rect x="22" y="12" width="4" height="12" rx="2" stroke="#EA580C" stroke-width="2"/>
-          <!-- Ручка низ -->
           <rect x="22" y="38" width="4" height="16" rx="2" stroke="#EA580C" stroke-width="2"/>
-          <!-- Иконка мысли (пузырь) -->
           <circle cx="48" cy="8" r="7" fill="#EA580C" opacity="0.15"/>
           <circle cx="54" cy="4" r="4" fill="#EA580C" opacity="0.10"/>
           <circle cx="58" cy="2" r="2" fill="#EA580C" opacity="0.08"/>
@@ -244,7 +215,6 @@
       <p class="recipes-subtitle" id="recipes-subtitle">Нашли 3 блюда из ваших продуктов</p>
     </div>
 
-    <!-- Блок ошибки (если что-то пошло не так) -->
     <div class="error-block" id="recipes-error" role="alert">
       <div class="error-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -256,9 +226,7 @@
       <p class="error-text" id="recipes-error-text">Произошла ошибка. Попробуйте ещё раз.</p>
     </div>
 
-    <!-- Контейнер для карточек рецептов (заполняется через JS) -->
-    <div id="recipes-container" role="list" aria-label="Список рецептов">
-    </div>
+    <div id="recipes-container" role="list" aria-label="Список рецептов"></div>
 
     <div class="spacer"></div>
 
@@ -272,7 +240,187 @@
 
   </section>
 
+
+  <!-- ══════════════════════════════════════════
+       ЭКРАН 5: ИЗБРАННОЕ
+       ══════════════════════════════════════════ -->
+  <section id="screen-favorites" class="screen hidden" role="main" aria-label="Избранные рецепты">
+
+    <div class="recipes-header">
+      <h1 class="recipes-title">Избранное</h1>
+      <p class="recipes-subtitle" id="favorites-count">0 сохранённых рецептов</p>
+    </div>
+
+    <div class="empty-state" id="favorites-empty">
+      <div class="empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
+      <p class="empty-title">Здесь будут ваши любимые рецепты</p>
+      <p class="empty-desc">Нажмите кнопку «Избранное» на любом рецепте, чтобы сохранить его</p>
+    </div>
+
+    <div id="favorites-list" role="list" aria-label="Сохранённые рецепты"></div>
+
+    <div class="spacer"></div>
+
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       ЭКРАН 6: ИСТОРИЯ
+       ══════════════════════════════════════════ -->
+  <section id="screen-history" class="screen hidden" role="main" aria-label="История генераций">
+
+    <div class="recipes-header">
+      <h1 class="recipes-title">История</h1>
+      <p class="recipes-subtitle" id="history-count">0 генераций</p>
+    </div>
+
+    <div class="empty-state" id="history-empty">
+      <div class="empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <p class="empty-title">История пока пуста</p>
+      <p class="empty-desc">После первой генерации рецептов здесь появится история ваших запросов</p>
+    </div>
+
+    <div id="history-list" role="list" aria-label="История генераций"></div>
+
+    <div class="spacer"></div>
+
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       ЭКРАН 7: СПИСОК ПОКУПОК
+       ══════════════════════════════════════════ -->
+  <section id="screen-shopping" class="screen hidden" role="main" aria-label="Список покупок">
+
+    <div class="shopping-header">
+      <div class="recipes-header" style="margin-bottom: 0">
+        <h1 class="recipes-title">Список покупок</h1>
+        <p class="recipes-subtitle" id="shopping-count">0 продуктов</p>
+      </div>
+      <button class="btn-clear-shopping" id="btn-clear-shopping" onclick="clearShoppingList()" style="display:none" aria-label="Очистить список покупок">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+        Очистить
+      </button>
+    </div>
+
+    <div class="empty-state" id="shopping-empty">
+      <div class="empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </div>
+      <p class="empty-title">Список покупок пуст</p>
+      <p class="empty-desc">Добавляйте ингредиенты из рецептов одним нажатием</p>
+    </div>
+
+    <div id="shopping-list" role="list" aria-label="Список покупок"></div>
+
+    <div class="spacer"></div>
+
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       ЭКРАН 8: РЕЦЕПТ ДНЯ
+       ══════════════════════════════════════════ -->
+  <section id="screen-daily" class="screen hidden" role="main" aria-label="Рецепт дня">
+
+    <div class="recipes-header">
+      <h1 class="recipes-title">Рецепт дня</h1>
+      <p class="recipes-subtitle" id="daily-date"></p>
+    </div>
+
+    <div class="daily-badge" aria-label="Обновляется каждый день">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      Обновляется каждый день
+    </div>
+
+    <div id="daily-recipe-container" role="list" aria-label="Рецепт дня"></div>
+
+    <div class="spacer"></div>
+
+  </section>
+
 </div><!-- /app -->
+
+
+<!-- ══════════════════════════════════════════
+     НИЖНЯЯ НАВИГАЦИЯ (TAB BAR)
+     ══════════════════════════════════════════ -->
+<nav id="tab-bar" class="tab-bar hidden" role="navigation" aria-label="Основная навигация">
+
+  <button class="tab-item active" id="tab-scanner" onclick="switchTab('scanner')" aria-label="Сканер — загрузить фото">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+    <span>Сканер</span>
+  </button>
+
+  <button class="tab-item" id="tab-favorites" onclick="switchTab('favorites')" aria-label="Избранные рецепты">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+    <span>Избранное</span>
+  </button>
+
+  <button class="tab-item" id="tab-history" onclick="switchTab('history')" aria-label="История генераций">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+    <span>История</span>
+  </button>
+
+  <button class="tab-item" id="tab-shopping" onclick="switchTab('shopping')" aria-label="Список покупок">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="9" cy="21" r="1"/>
+      <circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    <span>Покупки</span>
+  </button>
+
+  <button class="tab-item" id="tab-daily" onclick="switchTab('daily')" aria-label="Рецепт дня">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span>Рецепт дня</span>
+  </button>
+
+</nav>
 
 
 <!-- ══════════════════════════════════════════
@@ -284,7 +432,6 @@
 
     <div class="modal-icon" aria-hidden="true">
       <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- VK-подобный значок -->
         <rect width="34" height="34" rx="8" fill="rgba(255,255,255,0.20)"/>
         <path d="M17 8l2.5 6H26l-5 4 2 6.5L17 21l-6 3.5 2-6.5-5-4h6.5L17 8z"
               fill="white" opacity="0.9"/>
@@ -293,7 +440,7 @@
 
     <div>
       <h2 class="modal-title" id="modal-title">Бесплатный результат</h2>
-      <p class="modal-body">
+      <p class="modal-body" id="modal-body">
         Для получения бесплатного результата подпишитесь на наше сообщество — это займёт несколько секунд
       </p>
       <div class="modal-public-name" id="modal-public-name" aria-live="polite">
@@ -324,10 +471,11 @@
 </div><!-- /modal-overlay -->
 
 
-<!-- Порядок подключения скриптов важен: config → openai → app -->
-<script src="config.js?v=22"></script>
-<script src="openai.js?v=22"></script>
-<script src="app.js?v=22"></script>
+<!-- Порядок подключения скриптов важен: config → daily-recipes → openai → app -->
+<script src="config.js?v=23"></script>
+<script src="daily-recipes.js?v=23"></script>
+<script src="openai.js?v=23"></script>
+<script src="app.js?v=23"></script>
 
 </body>
 </html>
