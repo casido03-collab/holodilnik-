@@ -6,7 +6,7 @@ const CONFIG = {
 
   // URL прокси на Vercel — заполните после деплоя на vercel.com
   // Пример: 'https://holodilnik-.vercel.app/api/proxy'
-  PROXY_URL: 'ВСТАВЬТЕ_URL_ПОСЛЕ_ДЕПЛОЯ_НА_VERCEL',
+  PROXY_URL: 'https://holotesting.pages.dev/proxy',
 
   // Паблики VK для предложения подписки (ротация)
   // Предложение показывается после каждых 2 генераций
