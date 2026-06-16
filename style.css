@@ -358,6 +358,8 @@ input { font-family: var(--font); }
   width: 100%;
   max-height: 500px;
   object-fit: contain;
+  object-position: center;
+  image-orientation: from-image;
   border-radius: var(--r-md);
   display: none;
   background: transparent;

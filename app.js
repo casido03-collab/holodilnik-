@@ -87,37 +87,94 @@ function handleFileInput(input) {
   const file = input.files?.[0]
   if (!file) return
 
-  // Проверка типа файла
   if (!file.type.startsWith('image/')) {
     showUploadError('Пожалуйста, выберите файл изображения (JPG, PNG)')
     return
   }
 
-  // Проверка размера (20 МБ)
   if (file.size > 20 * 1024 * 1024) {
     showUploadError('Файл слишком большой. Максимальный размер — 20 МБ')
     return
   }
 
   state.selectedFile = file
-
-  // Показываем превью
-  const preview  = document.getElementById('photo-preview')
-  const zone     = document.getElementById('upload-zone')
-  const empty    = document.getElementById('upload-empty-state')
-  const actions  = document.getElementById('photo-actions')
-
-  const url = URL.createObjectURL(file)
-  preview.src = url
-  preview.classList.add('visible')
-  empty.style.display = 'none'
-  zone.classList.add('has-photo')
-  actions.classList.add('visible')
-
+  showPhotoPreview(file)
   hideUploadError()
-
-  // Сбросить input для повторного выбора того же файла
   input.value = ''
+}
+
+function showPhotoPreview(file) {
+  const preview = document.getElementById('photo-preview')
+  const zone    = document.getElementById('upload-zone')
+  const empty   = document.getElementById('upload-empty-state')
+  const actions = document.getElementById('photo-actions')
+
+  const img = new Image()
+  const url = URL.createObjectURL(file)
+
+  img.onload = () => {
+    // Читаем EXIF-ориентацию из первых байт файла
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const view = new DataView(e.target.result)
+      let orientation = 1
+
+      if (view.getUint16(0, false) === 0xFFD8) {
+        let offset = 2
+        while (offset < view.byteLength) {
+          if (view.getUint16(offset, false) === 0xFFE1) {
+            const exif = view.getUint32(offset + 4, false)
+            if (exif === 0x45786966) {
+              const little = view.getUint16(offset + 10, false) === 0x4949
+              const tags = view.getUint16(offset + 14, little)
+              for (let i = 0; i < tags; i++) {
+                if (view.getUint16(offset + 16 + i * 12, little) === 0x0112) {
+                  orientation = view.getUint16(offset + 16 + i * 12 + 8, little)
+                  break
+                }
+              }
+            }
+            break
+          }
+          offset += 2 + view.getUint16(offset + 2, false)
+        }
+      }
+
+      // Рисуем на canvas с правильным поворотом
+      const canvas  = document.createElement('canvas')
+      const ctx     = canvas.getContext('2d')
+      const sw = img.naturalWidth
+      const sh = img.naturalHeight
+      const rotated = orientation >= 5
+
+      canvas.width  = rotated ? sh : sw
+      canvas.height = rotated ? sw : sh
+
+      const transforms = {
+        1: () => {},
+        2: () => { ctx.transform(-1, 0, 0, 1, sw, 0) },
+        3: () => { ctx.transform(-1, 0, 0, -1, sw, sh) },
+        4: () => { ctx.transform(1, 0, 0, -1, 0, sh) },
+        5: () => { ctx.transform(0, 1, 1, 0, 0, 0) },
+        6: () => { ctx.transform(0, 1, -1, 0, sh, 0) },
+        7: () => { ctx.transform(0, -1, -1, 0, sh, sw) },
+        8: () => { ctx.transform(0, -1, 1, 0, 0, sw) },
+      }
+      ;(transforms[orientation] || transforms[1])()
+      ctx.drawImage(img, 0, 0)
+
+      preview.src = canvas.toDataURL('image/jpeg', 0.92)
+      URL.revokeObjectURL(url)
+
+      preview.classList.add('visible')
+      empty.style.display = 'none'
+      zone.classList.add('has-photo')
+      actions.classList.add('visible')
+    }
+    reader.readAsArrayBuffer(file)
+  }
+
+  img.src = url
 }
 
 // ═══════════════════════════════════════════════════════════════
