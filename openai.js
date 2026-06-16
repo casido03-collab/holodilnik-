@@ -124,9 +124,9 @@ async function analyzeAndGetRecipes(file, styleKey = 'fast') {
     ]
   }
 
-  const apiKey = CONFIG && CONFIG.OPENAI_API_KEY
-  if (!apiKey || apiKey === 'ВСТАВЬТЕ_КЛЮЧ_ЗДЕСЬ') {
-    throw new Error('API ключ не настроен. Обратитесь к разработчику.')
+  const proxyUrl = CONFIG && CONFIG.PROXY_URL
+  if (!proxyUrl || proxyUrl.startsWith('ВСТАВЬТЕ')) {
+    throw new Error('Прокси не настроен. Обратитесь к разработчику.')
   }
 
   const controller = new AbortController()
@@ -134,12 +134,9 @@ async function analyzeAndGetRecipes(file, styleKey = 'fast') {
 
   let response
   try {
-    response = await fetch('https://api.openai.com/v1/chat/completions', {
+    response = await fetch(proxyUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
       signal: controller.signal
     })

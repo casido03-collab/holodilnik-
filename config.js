@@ -4,9 +4,9 @@
 
 const CONFIG = {
 
-  // Ваш API-ключ OpenAI
-  // Получить: https://platform.openai.com/api-keys
-  OPENAI_API_KEY: 'ВСТАВЬТЕ_КЛЮЧ_ЗДЕСЬ',
+  // URL прокси на Vercel — заполните после деплоя на vercel.com
+  // Пример: 'https://holodilnik-.vercel.app/api/proxy'
+  PROXY_URL: 'ВСТАВЬТЕ_URL_ПОСЛЕ_ДЕПЛОЯ_НА_VERCEL',
 
   // Паблики VK для предложения подписки (ротация)
   // Предложение показывается после каждых 2 генераций

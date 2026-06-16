@@ -24,21 +24,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject OpenAI API Key
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          python3 -c "
-          import os
-          key = os.environ['OPENAI_API_KEY']
-          with open('config.js', 'r', encoding='utf-8') as f:
-              content = f.read()
-          content = content.replace('ВСТАВЬТЕ_КЛЮЧ_ЗДЕСЬ', key)
-          with open('config.js', 'w', encoding='utf-8') as f:
-              f.write(content)
-          print('API key injected successfully')
-          "
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
