@@ -568,6 +568,7 @@ input { font-family: var(--font); }
   box-shadow: var(--shadow-md);
   overflow: hidden;
   animation: slideUpFade 0.45s ease both;
+  margin-bottom: 16px;
 }
 
 .recipe-card:nth-child(2) { animation-delay: 0.12s; }
