@@ -103,10 +103,9 @@ async function analyzeAndGetRecipes(file, styleKey = 'fast') {
     ]
   }
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  const response = await fetch('https://blue-limit-95b7.casido03.workers.dev', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${CONFIG.OPENAI_API_KEY}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(requestBody)
