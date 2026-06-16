@@ -432,24 +432,44 @@ async function handleSubscribe() {
   const groupId   = parseInt(overlay.dataset.publicId || '0')
   const publicUrl = overlay.dataset.publicUrl || ''
 
-  // Показываем спиннер
   btn.classList.add('loading')
+
+  let subscribed = false
 
   try {
     if (bridge && groupId > 0) {
-      await bridge.send('VKWebAppJoinGroup', { group_id: groupId })
+      const result = await bridge.send('VKWebAppJoinGroup', { group_id: groupId })
+      // result.result === true если подписался или уже был подписан
+      subscribed = result && result.result === true
     } else if (bridge && publicUrl) {
-      // Открываем ссылку через VK Bridge (работает внутри VK WebView)
       await bridge.send('VKWebAppOpenLink', { link: publicUrl })
+      subscribed = true // не можем проверить, пропускаем
     } else if (publicUrl) {
       window.open(publicUrl, '_blank', 'noopener,noreferrer')
+      subscribed = true
     }
   } catch (e) {
-    // Пользователь закрыл или ошибка — продолжаем
+    // Пользователь закрыл диалог — не подписался
+    subscribed = false
   }
 
   btn.classList.remove('loading')
-  hideSubscribeModal() // внутри hideSubscribeModal сработает afterModalAction
+
+  if (!subscribed) {
+    // Показываем подсказку что нужно подписаться
+    const body = document.getElementById('modal-body')
+    if (body) {
+      body.textContent = 'Нужно подписаться, чтобы получить рецепты. Нажмите кнопку ещё раз.'
+      body.style.color = '#DC2626'
+      setTimeout(() => {
+        body.textContent = 'Для получения бесплатного результата подпишитесь на наше сообщество — это займёт несколько секунд'
+        body.style.color = ''
+      }, 3000)
+    }
+    return
+  }
+
+  hideSubscribeModal()
 }
 
 // ═══════════════════════════════════════════════════════════════
