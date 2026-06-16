@@ -14,13 +14,31 @@ const SYSTEM_PROMPT = `Ты — дружелюбный кулинарный по
 
 async function fileToBase64(file) {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const base64 = reader.result.split(',')[1]
+    const img = new Image()
+    const url = URL.createObjectURL(file)
+
+    img.onload = () => {
+      const MAX = 1024
+      let w = img.naturalWidth
+      let h = img.naturalHeight
+
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX }
+        else        { w = Math.round(w * MAX / h); h = MAX }
+      }
+
+      const canvas = document.createElement('canvas')
+      canvas.width  = w
+      canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      URL.revokeObjectURL(url)
+
+      const base64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1]
       resolve(base64)
     }
-    reader.onerror = reject
-    reader.readAsDataURL(file)
+
+    img.onerror = reject
+    img.src = url
   })
 }
 
