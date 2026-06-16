@@ -131,7 +131,7 @@ async function analyzeAndGetRecipes(file, styleKey = 'fast') {
   try {
     response = await fetch('https://blue-limit-95b7.casido03.workers.dev', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(requestBody),
       signal: controller.signal
     })
