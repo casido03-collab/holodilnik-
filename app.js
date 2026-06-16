@@ -444,6 +444,14 @@ function handleOverlayClick(event) {
   // Клик по фону не закрывает модалку — подписка обязательна
 }
 
+// Определяем что запущены внутри VK WebView
+function isInsideVK() {
+  const ua = navigator.userAgent || ''
+  return ua.includes('VKAndroid') || ua.includes('VKIOS') ||
+         window.location.href.includes('vk.com') ||
+         window.location.href.includes('m.vk.ru')
+}
+
 async function handleSubscribe() {
   const overlay   = document.getElementById('modal-overlay')
   const btn       = document.getElementById('btn-subscribe')
@@ -455,19 +463,18 @@ async function handleSubscribe() {
   let subscribed = false
 
   try {
-    if (bridge && groupId > 0) {
-      const result = await bridge.send('VKWebAppJoinGroup', { group_id: groupId })
-      // result.result === true если подписался или уже был подписан
+    if (bridge && groupId > 0 && isInsideVK()) {
+      // VK WebView — используем нативный диалог с таймаутом 10с
+      const joinPromise = bridge.send('VKWebAppJoinGroup', { group_id: groupId })
+      const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 10000))
+      const result = await Promise.race([joinPromise, timeout])
       subscribed = result && result.result === true
-    } else if (bridge && publicUrl) {
-      await bridge.send('VKWebAppOpenLink', { link: publicUrl })
-      subscribed = true // не можем проверить, пропускаем
     } else if (publicUrl) {
+      // Браузер — открываем ссылку на паблик
       window.open(publicUrl, '_blank', 'noopener,noreferrer')
       subscribed = true
     }
   } catch (e) {
-    // Пользователь закрыл диалог — не подписался
     subscribed = false
   }
 
