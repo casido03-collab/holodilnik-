@@ -6,9 +6,10 @@
 const state = {
   currentScreen:    'welcome',
   selectedFile:     null,
+  selectedImageBase64: null, // готовый base64 для API
   selectedStyle:    'fast',
   generationCount:  parseInt(localStorage.getItem('holodilnik_gen') || '0'),
-  afterModalAction: null, // функция, которую выполнить после закрытия модалки
+  afterModalAction: null,
 }
 
 // ── Фразы для экрана загрузки ──────────────────────────────────
@@ -140,15 +141,29 @@ function showPhotoPreview(file) {
         }
       }
 
-      // Рисуем на canvas с правильным поворотом
+      // Рисуем на canvas с правильным поворотом + сжатие до 1024px
+      const MAX = 1024
       const canvas  = document.createElement('canvas')
       const ctx     = canvas.getContext('2d')
-      const sw = img.naturalWidth
-      const sh = img.naturalHeight
+      let sw = img.naturalWidth
+      let sh = img.naturalHeight
       const rotated = orientation >= 5
 
-      canvas.width  = rotated ? sh : sw
-      canvas.height = rotated ? sw : sh
+      // Сжимаем до MAX
+      let dw = rotated ? sh : sw
+      let dh = rotated ? sw : sh
+      if (dw > MAX || dh > MAX) {
+        if (dw > dh) { dh = Math.round(dh * MAX / dw); dw = MAX }
+        else         { dw = Math.round(dw * MAX / dh); dh = MAX }
+      }
+
+      canvas.width  = dw
+      canvas.height = dh
+
+      const scaleX = dw / (rotated ? sh : sw)
+      const scaleY = dh / (rotated ? sw : sh)
+
+      ctx.scale(scaleX, scaleY)
 
       const transforms = {
         1: () => {},
@@ -163,7 +178,10 @@ function showPhotoPreview(file) {
       ;(transforms[orientation] || transforms[1])()
       ctx.drawImage(img, 0, 0)
 
-      preview.src = canvas.toDataURL('image/jpeg', 0.92)
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82)
+      state.selectedImageBase64 = dataUrl.split(',')[1]
+
+      preview.src = dataUrl
       URL.revokeObjectURL(url)
 
       preview.classList.add('visible')

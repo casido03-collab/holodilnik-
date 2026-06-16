@@ -92,7 +92,10 @@ function validateRecipes(data) {
 }
 
 async function analyzeAndGetRecipes(file, styleKey = 'fast') {
-  const base64Image = await fileToBase64(file)
+  // Используем готовый base64 из state если есть, иначе конвертируем
+  const base64Image = (state && state.selectedImageBase64)
+    ? state.selectedImageBase64
+    : await fileToBase64(file)
 
   const requestBody = {
     model: 'gpt-4o',
