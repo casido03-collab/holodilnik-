@@ -141,8 +141,8 @@ function showPhotoPreview(file) {
         }
       }
 
-      // Рисуем на canvas с правильным поворотом + сжатие до 1024px
-      const MAX = 1024
+      // Рисуем на canvas с правильным поворотом + сжатие до 512px
+      const MAX = 512
       const canvas  = document.createElement('canvas')
       const ctx     = canvas.getContext('2d')
       let sw = img.naturalWidth
@@ -178,7 +178,7 @@ function showPhotoPreview(file) {
       ;(transforms[orientation] || transforms[1])()
       ctx.drawImage(img, 0, 0)
 
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.82)
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.6)
       state.selectedImageBase64 = dataUrl.split(',')[1]
 
       preview.src = dataUrl
