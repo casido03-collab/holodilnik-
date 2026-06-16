@@ -33,7 +33,13 @@ const bridge = window.vkBridge || null
 function initVK() {
   if (bridge) {
     try { bridge.send('VKWebAppInit') } catch (_) {}
+    trackEvent('login') // запуск приложения
   }
+}
+
+function trackEvent(eventName) {
+  if (!bridge || !isInsideVK()) return
+  bridge.send('VKWebAppTrackEvent', { event_name: eventName }).catch(() => {})
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -334,6 +340,7 @@ async function doSubmit() {
 
     state.generationCount++
     localStorage.setItem('holodilnik_gen', state.generationCount)
+    trackEvent('lead') // пользователь получил рецепты — главная конверсия
 
     stopLoadingPhrases()
     showScreen('recipes')
@@ -581,6 +588,7 @@ function toggleFavoriteByKey(key) {
     saveFavorites(list)
     updateFavButtonState(key, true)
     showToast('✓ Добавлено в избранное')
+    trackEvent('add_to_cart') // добавление рецепта в избранное
   }
 }
 
@@ -1049,6 +1057,7 @@ async function handleSubscribe() {
     return
   }
 
+  trackEvent('subscribe') // пользователь подписался на паблик
   hideSubscribeModal()
 }
 
@@ -1122,6 +1131,7 @@ async function handleRetry() {
 
     state.generationCount++
     localStorage.setItem('holodilnik_gen', state.generationCount)
+    trackEvent('lead')
 
     stopLoadingPhrases()
     showScreen('recipes')
