@@ -937,20 +937,48 @@ async function shareRecipeByKey(key) {
     } catch (_) {}
   }
 
-  // Fallback: Web Share API или буфер обмена
+  // Fallback 1: Web Share API (мобильный браузер)
   if (navigator.share) {
     try {
       await navigator.share({ title: recipe.name, text })
       return
-    } catch (_) {}
+    } catch (e) {
+      if (e.name === 'AbortError') return // пользователь закрыл шит
+    }
   }
 
+  // Fallback 2: Clipboard API
   try {
     await navigator.clipboard.writeText(text)
-    showToast('✓ Рецепт скопирован в буфер')
-  } catch (_) {
-    showToast('Не удалось поделиться рецептом')
+    showToast('✓ Рецепт скопирован')
+    return
+  } catch (_) {}
+
+  // Fallback 3: модалка с textarea (работает внутри VK iframe)
+  showShareModal(text)
+}
+
+function showShareModal(text) {
+  const modal    = document.getElementById('share-modal')
+  const textarea = document.getElementById('share-textarea')
+  if (!modal || !textarea) return
+  textarea.value = text
+  modal.classList.remove('hidden')
+  setTimeout(() => { textarea.select() }, 150)
+}
+
+function closeShareModal(e) {
+  if (e.target === document.getElementById('share-modal')) {
+    document.getElementById('share-modal').classList.add('hidden')
   }
+}
+
+function copyShareText() {
+  const textarea = document.getElementById('share-textarea')
+  textarea.select()
+  const ok = document.execCommand('copy')
+  document.getElementById('share-modal').classList.add('hidden')
+  showToast(ok ? '✓ Рецепт скопирован' : 'Выделите текст и скопируйте вручную')
 }
 
 // ═══════════════════════════════════════════════════════════════

@@ -1571,6 +1571,55 @@ input { font-family: var(--font); }
 }
 
 /* ════════════════════════════════════════════════════════════
+   МОДАЛКА ПОДЕЛИТЬСЯ (FALLBACK)
+   ════════════════════════════════════════════════════════════ */
+.share-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  animation: fadeIn 0.2s ease;
+}
+.share-modal-overlay.hidden {
+  display: none;
+}
+.share-modal-card {
+  background: var(--c-surface);
+  border-radius: 20px 20px 16px 16px;
+  padding: 20px 16px 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-lg);
+}
+.share-modal-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--c-text);
+  text-align: center;
+  margin: 0;
+}
+.share-textarea {
+  width: 100%;
+  height: 180px;
+  border: 1.5px solid var(--c-border);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--c-text);
+  background: var(--c-bg);
+  resize: none;
+  font-family: inherit;
+  line-height: 1.5;
+  box-sizing: border-box;
+  outline: none;
+}
+
+/* ════════════════════════════════════════════════════════════
    КНОПКА УДАЛИТЬ ИЗ ИЗБРАННОГО
    ════════════════════════════════════════════════════════════ */
 .btn-remove-favorite {

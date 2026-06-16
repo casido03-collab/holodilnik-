@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#EA580C">
   <title>Что приготовить?</title>
-  <link rel="stylesheet" href="style.css?v=23">
+  <link rel="stylesheet" href="style.css?v=24">
   <!-- VK Bridge SDK — нужен для работы внутри VK Mini Apps -->
   <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 </head>
@@ -470,12 +470,30 @@
   </div>
 </div><!-- /modal-overlay -->
 
+<!-- Модалка: поделиться рецептом (fallback) -->
+<div id="share-modal" class="share-modal-overlay hidden" onclick="closeShareModal(event)">
+  <div class="share-modal-card">
+    <p class="share-modal-title">Скопируйте и поделитесь</p>
+    <textarea id="share-textarea" class="share-textarea" readonly></textarea>
+    <button class="btn-primary" onclick="copyShareText()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="13" height="13" rx="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      <span class="btn-label">Скопировать</span>
+    </button>
+    <button class="btn-secondary" onclick="document.getElementById('share-modal').classList.add('hidden')" style="margin-top:-4px">
+      Закрыть
+    </button>
+  </div>
+</div>
 
 <!-- Порядок подключения скриптов важен: config → daily-recipes → openai → app -->
-<script src="config.js?v=23"></script>
-<script src="daily-recipes.js?v=23"></script>
-<script src="openai.js?v=23"></script>
-<script src="app.js?v=23"></script>
+<script src="config.js?v=24"></script>
+<script src="daily-recipes.js?v=24"></script>
+<script src="openai.js?v=24"></script>
+<script src="app.js?v=24"></script>
 
 </body>
 </html>
