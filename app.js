@@ -228,11 +228,9 @@ async function handleSubmit() {
 
   hideUploadError()
 
-  // Показываем окно подписки только если ещё не подписан
-  const alreadySubscribed = localStorage.getItem('holodilnik_subscribed') === '1'
+  // Каждый раз проверяем подписку через VK
   const publics = CONFIG.VK_PUBLICS
-
-  if (!alreadySubscribed && publics && publics.length > 0) {
+  if (publics && publics.length > 0) {
     const vkPublic = publics[0]
     if (vkPublic && (vkPublic.id > 0 || vkPublic.url)) {
       state.afterModalAction = doSubmit
@@ -489,7 +487,6 @@ async function handleSubscribe() {
     return
   }
 
-  localStorage.setItem('holodilnik_subscribed', '1')
   hideSubscribeModal()
 }
 
