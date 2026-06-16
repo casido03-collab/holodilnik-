@@ -356,10 +356,11 @@ input { font-family: var(--font); }
 /* Превью фото */
 #photo-preview {
   width: 100%;
-  max-height: 250px;
-  object-fit: cover;
+  max-height: 500px;
+  object-fit: contain;
   border-radius: var(--r-md);
   display: none;
+  background: transparent;
 }
 
 #photo-preview.visible {
