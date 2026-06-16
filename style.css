@@ -322,7 +322,7 @@ input { font-family: var(--font); }
   border-color: var(--c-primary);
   background: rgba(255, 251, 235, 0.60);
   padding: var(--s-3);
-  min-height: 0;
+  min-height: 320px;
   cursor: default;
 }
 
@@ -356,7 +356,8 @@ input { font-family: var(--font); }
 /* Превью фото */
 #photo-preview {
   width: 100%;
-  max-height: 500px;
+  height: 100%;
+  max-height: 460px;
   object-fit: contain;
   object-position: center;
   image-orientation: from-image;
