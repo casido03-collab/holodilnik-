@@ -10,7 +10,7 @@ const CONFIG = {
   // URL Google Apps Script Web App для трекинга подписок из приложения.
   // Заполнить после деплоя скрипта (Развернуть → Веб-приложение → скопировать URL).
   // Пока пустая строка — трекинг отключён.
-  TRACKING_URL: '',
+  TRACKING_URL: 'https://script.google.com/macros/s/AKfycbwRbI-ERfy4fzGxxu0L8DrM8MT-XPJ8OpYdONH56HIhcGibFo3GS74fLGULSnILK1ov/exec',
 
   // РЕЖИМ МОДЕРАЦИИ: false = подписки не требуются (для прохождения проверки VK)
   // После получения одобрения VK установите true, чтобы включить проверку подписок
