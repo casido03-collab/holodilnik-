@@ -7,6 +7,11 @@ const CONFIG = {
   // URL прокси на Google Cloud Functions
   PROXY_URL: 'https://europe-west1-project-621db92b-aeea-43fb-829.cloudfunctions.net/proxy',
 
+  // URL Google Apps Script Web App для трекинга подписок из приложения.
+  // Заполнить после деплоя скрипта (Развернуть → Веб-приложение → скопировать URL).
+  // Пока пустая строка — трекинг отключён.
+  TRACKING_URL: '',
+
   // РЕЖИМ МОДЕРАЦИИ: false = подписки не требуются (для прохождения проверки VK)
   // После получения одобрения VK установите true, чтобы включить проверку подписок
   SUBSCRIPTION_ACTIVE: false,

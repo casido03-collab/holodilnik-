@@ -17,6 +17,45 @@ const state = {
 // Хранилище рецептов по ключу (для кнопок-действий)
 const recipeStore = {}
 
+// ── Трекинг подписок ──────────────────────────────────────────
+const SESSION_ID      = Math.random().toString(36).substr(2, 9)
+let   sessionSubCount = 0 // сколько пабликов подписался в этой сессии
+
+function getVKUserId() {
+  return new URLSearchParams(window.location.search).get('vk_user_id') || 'anon'
+}
+
+function trackSubscription(groupId) {
+  const url = CONFIG && CONFIG.TRACKING_URL
+  if (!url) return
+
+  const publics = (CONFIG.VK_PUBLICS || [])
+  const idx     = publics.findIndex(p => p.id === groupId)
+  if (idx < 0) return
+
+  const publicNum  = idx + 1
+  const publicName = publics[idx].name
+
+  sessionSubCount++
+
+  const params = new URLSearchParams({
+    event:       'subscribe',
+    session:     SESSION_ID,
+    user_id:     getVKUserId(),
+    public_num:  publicNum,
+    public_name: publicName,
+    total:       sessionSubCount,
+  })
+
+  // sendBeacon работает из iframe без CORS-ограничений
+  const fullUrl = `${url}?${params.toString()}`
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(fullUrl)
+  } else {
+    new Image().src = fullUrl
+  }
+}
+
 // ── Фразы для экрана загрузки ──────────────────────────────────
 const LOADING_PHRASES = [
   'Изучаю ваши продукты...',
@@ -1057,7 +1096,8 @@ async function handleSubscribe() {
     return
   }
 
-  trackEvent('subscribe') // пользователь подписался на паблик
+  trackEvent('subscribe')        // VK Ads оптимизация
+  trackSubscription(groupId)     // наша аналитика в Google Sheets
   hideSubscribeModal()
 }
 
