@@ -383,11 +383,46 @@ async function doSubmit() {
 
     stopLoadingPhrases()
     showScreen('recipes')
+
+    // После первой генерации — предлагаем включить уведомления
+    if (state.generationCount === 1) {
+      setTimeout(maybeShowPushModal, 1200)
+    }
   } catch (err) {
     stopLoadingPhrases()
     showScreen('recipes')
     showRecipesError(err.message || 'Не удалось получить рецепты. Проверьте интернет и попробуйте ещё раз.')
   }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  УВЕДОМЛЕНИЯ
+// ═══════════════════════════════════════════════════════════════
+
+function maybeShowPushModal() {
+  if (localStorage.getItem('holodilnik_push_asked')) return
+  if (!bridge || !isInsideVK()) return
+  document.getElementById('push-modal').classList.remove('hidden')
+}
+
+async function handlePushAllow() {
+  localStorage.setItem('holodilnik_push_asked', '1')
+  document.getElementById('push-modal').classList.add('hidden')
+  if (bridge && isInsideVK()) {
+    try {
+      await bridge.send('VKWebAppAllowNotifications')
+      showToast('✓ Уведомления включены')
+    } catch (_) {}
+  }
+}
+
+function handlePushDecline() {
+  localStorage.setItem('holodilnik_push_asked', '1')
+  document.getElementById('push-modal').classList.add('hidden')
+}
+
+function closePushModal(e) {
+  if (e.target === document.getElementById('push-modal')) handlePushDecline()
 }
 
 // ═══════════════════════════════════════════════════════════════

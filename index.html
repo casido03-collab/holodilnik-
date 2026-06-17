@@ -489,6 +489,23 @@
   </div>
 </div>
 
+<!-- Модалка: разрешить уведомления -->
+<div id="push-modal" class="share-modal-overlay hidden" onclick="closePushModal(event)">
+  <div class="share-modal-card" style="text-align:center">
+    <div style="font-size:40px;margin-bottom:4px" aria-hidden="true">🔔</div>
+    <p class="share-modal-title">Рецепт дня каждое утро</p>
+    <p style="font-size:14px;color:var(--c-text-secondary);margin:0 0 4px">
+      Разрешите уведомления — и мы будем присылать вам свежий рецепт каждый день
+    </p>
+    <button class="btn-primary" onclick="handlePushAllow()">
+      <span class="btn-label">Хочу получать рецепты</span>
+    </button>
+    <button class="btn-secondary" onclick="handlePushDecline()" style="margin-top:-4px">
+      Нет, спасибо
+    </button>
+  </div>
+</div>
+
 <!-- Порядок подключения скриптов важен: config → daily-recipes → openai → app -->
 <script src="config.js?v=24"></script>
 <script src="daily-recipes.js?v=24"></script>
